@@ -1,21 +1,21 @@
 import { Button, Navbar, Modal } from 'react-bootstrap';
 import { useState, useContext } from 'react';
-import { CartContext } from '../../CartContext';
-import CartProduct from '../CartProduct/CartProduct';
+import { CartContext } from '../CartContext';
+import CartProduct from './CartProduct/CartProduct';
 import { useMutation } from '@apollo/client';
-import { CHECKOUT } from '../../utils/mutations';
+import { CHECKOUT } from '../utils/mutations';
 
 function NavComponent() {
     const cart = useContext(CartContext);
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    const [runCheckout, {error}] = useMutation(CHECKOUT);
+    const [runCheckout, { error }] = useMutation(CHECKOUT);
 
     // checkout function for checkout button w/ POST route.
     const checkout = async () => {
-        const {data} = await runCheckout({
-            variables: {...cart.items}
+        const { data } = await runCheckout({
+            variables: { ...cart.items }
         })
         console.log(data)
         // await fetch('/checkout', { // this address will need to change
@@ -41,11 +41,11 @@ function NavComponent() {
             <Navbar bg='transparent' expand='sm'>
                 <Navbar.Toggle /> {/* Hamburger Button */}
                 <Navbar.Collapse className='justify-content-end'> {/* Everything for the Hamburger goes in here */}
-					<Navbar.Brand className='navbarText' href='/'>Home</Navbar.Brand>
+                    <Navbar.Brand className='navbarText' href='/'>Home</Navbar.Brand>
                     <Navbar.Brand className='navbarText' href='/about'>About</Navbar.Brand>
                     <Navbar.Brand className='navbarText' href='/store'>Store</Navbar.Brand>
                     <Navbar.Brand className='navbarText' href='/user'>Login</Navbar.Brand>
-                    <Button variant='dark' className='navbarText' onClick={handleShow}>Cart ({productCount}) </Button> 
+                    <Button variant='dark' className='navbarText' onClick={handleShow}>Cart ({productCount}) </Button>
                 </Navbar.Collapse>
 
                 <Modal show={show} onHide={handleClose}>
@@ -62,7 +62,7 @@ function NavComponent() {
                                     <CartProduct key={index} id={currentProduct.id} quantity={currentProduct.quantity}>Total</CartProduct>
                                 ))}
                                 {/* total cost limited to 2 decimals */}
-																<br></br>
+                                <br></br>
                                 <h2 className='totalh2'>Total: ${cart.getTotalCost().toFixed(2)}</h2>
                                 {/* checkout button */}
                                 <Button variant='success' onClick={checkout}>Checkout</Button>

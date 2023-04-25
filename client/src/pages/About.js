@@ -2,7 +2,7 @@
 // import { Link } from 'react-router-dom';
 import react from 'react'
 import { Row, Col } from 'react-bootstrap'
-import NavComponent from '../components/Navbar/Navbar';
+import { NavComponent } from '../components';
 import Header from '../components/Header'
 //GRAPHQL
 // import { useQuery } from '@apollo/client';

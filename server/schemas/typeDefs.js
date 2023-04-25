@@ -13,6 +13,7 @@ type User {
     email: String
     password: String
     payment: [Payment]
+    cart: ID
 }
 
 type Payment {
@@ -56,7 +57,8 @@ type Comment {
 }
 
 type Cart {
-    id: String!
+    _id: ID!
+    product: Product
     quantity: Int
 }
 
@@ -132,11 +134,12 @@ type Mutation {
         rating: Int
         ):Product
     addCart(
-        id: ID!
+        _id: ID!
+        product: ID!
         quantity: Int
     ):Cart
     updateCartItems(
-        userID: ID!
+        _id: ID!
         productID: ID!
         quantity: Int
     ):Cart  

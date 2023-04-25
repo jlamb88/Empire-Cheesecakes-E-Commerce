@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const { Schema } = mongoose
+const Cart = require('./Cart')
 
 const userSchema = new Schema({
     firstName: {
@@ -60,9 +61,9 @@ const userSchema = new Schema({
         default: {
             type: Boolean
         }
-    }]
-},
-    {}
+    }],
+    cart: Cart.schema
+}
 )
 
 userSchema.pre('save', async function (next) {

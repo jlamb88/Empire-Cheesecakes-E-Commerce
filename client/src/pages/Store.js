@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import { productArray } from '../productStore';
 import ProductCard from '../components/ProductCard/ProductCard';
 import Header from '../components/Header'
-import NavComponent from '../components/Navbar/Navbar'
+import { NavComponent } from '../components'
 
 function Store() {
     return (

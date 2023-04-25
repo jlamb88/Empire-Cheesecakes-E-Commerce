@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import UserPage from './UserPage'
 import Header from '../components/Header'
-import NavComponent from '../components/Navbar/Navbar';
+import { NavComponent, LoginForm } from '../components';
 import { Row, Col } from 'react-bootstrap'
 
 const adminUser = { email: "admin@admin.com", password: "admin" }

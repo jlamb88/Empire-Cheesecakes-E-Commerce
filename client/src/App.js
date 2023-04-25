@@ -25,7 +25,7 @@ import Store from './pages/Store';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import CartProvider from './CartContext';
-import NavComponent from './components/Navbar/Navbar';
+import { NavComponent } from './components';
 
 const httpLink = createHttpLink({
   uri: '/graphql',

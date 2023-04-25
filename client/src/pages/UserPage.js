@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import LoginForm from '../components/LoginForm'
 import Header from '../components/Header'
-import NavComponent from '../components/Navbar/Navbar'
+import { NavComponent } from '../components'
 import { Row, Col } from 'react-bootstrap'
+
 const UserPage = () => {
 
     const admin = {

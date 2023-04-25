@@ -22,7 +22,7 @@ const resolvers = {
             return await Order.findOne({ _id: orderId })
         },
         cart: async (parent, userId) => {
-            return await Cart.findOne({ user: { _id: userId } })
+            return await Cart.findOne({ userId: userId })
         },
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
@@ -62,8 +62,8 @@ const resolvers = {
         }
     },
     Mutation: {
-        addUser: async (parent, { firstName, lastName, streetAddress, city, state, zipcode, phone, email, password }) => {
-            const user = await User.create({ firstName, lastName, streetAddress, city, state, zipcode, phone, email, password })
+        addUser: async (parent, args) => {
+            const user = await User.create(args)
             const token = signToken(user)
 
             return { user, token }
@@ -85,13 +85,21 @@ const resolvers = {
 
             return { token, user }
         },
-        addOrder: async (parent, { userId, products, total, transId }, context) => {
-            return await Order.create({ userId, products, total, transId })
+        addOrder: async (parent, { productId, quantity }, context) => {
+            if (context.user) {
+                const cart = new Cart({ productId, quantity })
+
+                await User.findByIdAndUpdate(context.user._id, { $set: { cart: cart } })
+
+                return order
+            }
+
+            throw new AuthenticationError('Not logged in');
         },
-        updateUser: async (parent, { userId, firstName, lastName, streetAddress, city, state, zipcode, phone, email, password }) => {
+        updateUser: async (parent, args) => {
             return await User.findOneAndUpdate(
-                { _id: userId },
-                { firstName, lastName, streetAddress, city, state, zipcode, phone, email, password },
+                { _id: args.userId },
+                args,
                 { new: true }
             )
         },
@@ -123,23 +131,23 @@ const resolvers = {
                 { new: true }
             )
         },
-        addCart: async (parent, { userId, product, quantity }) => {
+        addCart: async (parent, { productId, quantity }, context) => {
             return await Cart.create(
-                { userId, product, quantity }
-            ) 
+                { productId, quantity }
+            )
             // throw new AuthenticationError('Cart error');
         },
-        updateCartItems: async (parent, { userId, productId, quantity }) => {
+        updateCartItems: async (parent, { id, productId }) => {
             return await Cart.findOneAndUpdate(
-                { userId: user._id },
-                { productId: product._id },
+                { _id: id },
+                { productId: productId },
                 { quantity },
                 { new: true }
             )
         },
-        deleteCartItem: async (parent, { userId, productId }) => {
+        deleteCartItem: async (parent, { id, productId }) => {
             return await Cart.findOneAndDelete(
-                { userId: user._id } || { productId: product._id }
+                { _id: id } || { productId: productId }
             )
         }
 
