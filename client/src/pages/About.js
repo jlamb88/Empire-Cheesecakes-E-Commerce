@@ -1,8 +1,8 @@
 //DEPENDENCIES
 // import { Link } from 'react-router-dom';
-import react from 'react'
+import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import NavComponent from '../components/Navbar/Navbar';
+import NaviBar from '../components/Navbar';
 import Header from '../components/Header'
 //GRAPHQL
 // import { useQuery } from '@apollo/client';
@@ -12,11 +12,11 @@ const About = () => {
 	return (
 		<section>
 			<Row>
-				<Col className='col-6'>
+				<Col>
 					<Header />
 				</Col>
-				<Col className='col-6 mt-3'>
-					<NavComponent />
+				<Col>
+					<NaviBar />
 				</Col>
 			</Row>
 			<div id='aboutus'>

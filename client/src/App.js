@@ -1,6 +1,7 @@
 //DEPENDENCIES
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap'
 import {
   ApolloClient,
   InMemoryCache,
@@ -10,22 +11,19 @@ import {
 import { setContext } from '@apollo/client/link/context';
 
 //PAGES
-import Home from './pages/Home';
-import UserPage from './pages/UserPage';
-import About from './pages/About';
-// import SignUp from './pages/SignUp';
+import { Home, UserPage, About, Store, Success, Cancel, SignUp, Login } from './pages'
 
 //CSS
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
+import './index.css';
 
 //COMPONENTS
-import Store from './pages/Store';
-import Success from './pages/Success';
-import Cancel from './pages/Cancel';
-import CartProvider from './CartContext';
-import NavComponent from './components/Navbar/Navbar';
+// import { CartProvider, Header, NaviBar, ProductCard, Queries, CartContext, LoginForm, SignupForm } from './components';
+// import Success from './pages/Success';
+// import Cancel from './pages/Cancel';
+import CartProvider from './components/CartContext';
+import AuthProvider from './components/AuthContext'
+import NaviBar from './components/Navbar';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -51,25 +49,21 @@ function App(details) {
   return (
     <div className='bg-parent'>
       <ApolloProvider client={client}>
-        <CartProvider>
-
-          <Container>
-            {/* <NavComponent /> */}
-            <BrowserRouter>
+        <Container>
+          <AuthProvider>
+            <CartProvider>
               <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/store' element={<Store />} />
+                <Route path="/store" element={<Store />} />
                 <Route path='/success' element={<Success />} />
                 <Route path='/cancel' element={<Cancel />} />
-                <Route path='/store' element={<Store />} />
-                <Route path='/user' element={<UserPage />} />
-                {/* <Route path='/signup' element={<SignUp />} /> */}
+                <Route path='/user' element={<Login />} />
+                <Route path='/signup' element={<SignUp />} />
                 <Route path='/about' element={<About />} />
               </Routes>
-            </BrowserRouter>
-          </Container>
-
-        </CartProvider>
+            </CartProvider>
+          </AuthProvider>
+        </Container>
       </ApolloProvider>
     </div >
   );

@@ -1,13 +1,15 @@
 import { gql } from '@apollo/client'
 
 export const LOGIN_USER = gql`
-mutation login($email: String!, $password: String!)  {
-    login(email: $email, password: $password) {
-      token
-      user {
-        _id
-      }
+mutation Login($email: String!, $password: String!)  {
+  login(email: $email, password: $password) {
+    token
+    user {
+      _id
+      firstName
+      lastName
     }
+  }
 }`
 
 export const ADD_USER = gql`
@@ -16,14 +18,32 @@ mutation addUser($email: String!, $password: String!, $firstName: String, $lastN
       token
       user {
         _id
+        firstName
+        lastName
       }
     }
   }
 `
-// changed userId to id, as in product, for testing
-export const CHECKOUT = gql`
-mutation addCart($id: String!, $quantity: Int) {
-  addCart(userId: $id, quantity: $quantity) {
-    cart
+export const ADD_CART = gql`
+mutation addCart($userId: ID!, $cartContents: [cartInput]!) {
+  addCart(userId: $userId, cartContents: $cartContents) {
+    userId
+    items {
+      productId
+      quantity
+    }
   }
-}`
+}
+`
+export const CHECKOUT = gql`
+mutation checkoutSession($userId: ID!) {
+  checkoutSession(userId: $userId) {
+    userId
+    transId
+    url
+  }
+}
+`
+// export const ADD_ORDER = gql`
+// `
+

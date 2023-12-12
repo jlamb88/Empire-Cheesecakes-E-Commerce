@@ -55,7 +55,8 @@ seedProduct = () => {
                     "text": "I order these cheesecakes every special occassion. They are absolutely the best! All or their baked goods are delicious",
                     "rating": 5
                 }
-            ]
+            ],
+            "image": 'https://i.imgur.com/O0aEdzE.pnghttps://i.imgur.com/O0aEdzE.png'
         },
         {
             "name": "Mini plain cheesecake",
@@ -77,25 +78,29 @@ seedProduct = () => {
                     "text": "Ordered this for a bridal shower. It was pretty good but maybe a little pricy for an everyday occassion",
                     "rating": 4
                 }
-            ]
+            ],
+            "image": 'https://i.imgur.com/yrt9W9I.png'
         },
         {
             "name": "Standard cherry cheesecake",
             "description": "Handmade 14 inch cheesecake with fresh cherry topping and shortbread crust",
             "price": 60,
-            "stock": 12
+            "stock": 12,
+            "image": 'https://i.imgur.com/NuZ1bz8.jpg'
         },
         {
             "name": "Carrot cake",
             "description": "Handmade 10 inch, four layer carrot cake with cream cheese frosting and topped with chopped walnuts",
             "price": 35,
-            "stock": 5
+            "stock": 5,
+            "image": 'https://i.imgur.com/ydrThRo.png'
         },
         {
             "name": "Hummingbird cake",
             "description": "Classic cake that is a southern tradition. Handmade 10 inch, four layer hummingbird cake with cream cheese frosting",
             "price": 35,
-            "stock": 5
+            "stock": 5,
+            "image": "https://i.imgur.com/XdeOb0o.jpeg"
         },
         {
             "name": "Chocolate hazelnut crepe cake",
@@ -108,7 +113,8 @@ seedProduct = () => {
                     "text": "So elegant and delicious. It's like eating an amazing eclair in cake form",
                     "rating": 5
                 }
-            ]
+            ],
+            "image": "https://i.imgur.com/p3g5Som.jpeg"
         },
         {
             "name": "Meyer lemon square",
@@ -121,9 +127,28 @@ seedProduct = () => {
                     "text": "Delightful and refreshing lemon squares with an exotic twist from the cardamom",
                     "rating": 4
                 }
+            ],
+            "image": "https://i.imgur.com/pbsim6O.jpeg"
+        }
+    ]
+}
+
+seedCart = () => {
+    return [
+        {
+            "userId": "653c03a1eea4e4cee4f01160",
+            "items": [
+                {
+                    "productId": "6556599658233c54fd98586f",
+                    "quantity": 1
+                },
+                {
+                    "productId": "6556599658233c54fd985867",
+                    "quantity": 4
+                }
             ]
         }
     ]
 }
 
-module.exports = { seedUser, seedProduct }
+module.exports = { seedUser, seedProduct, seedCart }

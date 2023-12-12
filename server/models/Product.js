@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const productSchema = new Schema({
+    // productId: {
+    //     type: Schema.Types.UUID,
+    //     required: true,
+    //     unique: true
+    // },
     name: {
         type: String,
         required: true
@@ -38,7 +43,10 @@ const productSchema = new Schema({
                 type: Date,
                 default: Date.now
             }
-        }]
+        }],
+    image: {
+        type: String
+    }
 })
 
 const Product = mongoose.model('Product', productSchema)

@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import LoginForm from '../components/LoginForm'
 import Header from '../components/Header'
-import NavComponent from '../components/Navbar/Navbar'
+import Navibar from '../components/Navbar'
 import { Row, Col } from 'react-bootstrap'
+
 const UserPage = () => {
 
     const admin = {
@@ -42,7 +43,7 @@ const UserPage = () => {
                     <Header />
                 </Col>
                 <Col className='col-6 mt-3'>
-                    <NavComponent />
+                    <Navibar />
                 </Col>
             </Row>
             {(user.email !== "") ? (

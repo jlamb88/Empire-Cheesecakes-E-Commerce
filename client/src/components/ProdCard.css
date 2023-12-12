@@ -1,0 +1,13 @@
+.card-title {
+min-height: 3em;
+}
+
+#description {
+ height: 6em;
+ display: block;
+ overflow:clip;
+}
+
+.card {
+min-height: 40em;
+}

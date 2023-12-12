@@ -2,14 +2,15 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
+const cors = require('cors')
+
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 // Stripe Secret Key
-const stripe = require('stripe')('sk_test_51M9WEeA0zgGYE8hKfLzdebUdsNrrjNE3SI2bkSS8NclVm5VXPYz0VglrMEMnmJnK4uKi3jsQvBEkHMaFZEpSJsLr00EcdyU0Ss');
+// const stripe = require('stripe')('sk_test_51M9WEeA0zgGYE8hKfLzdebUdsNrrjNE3SI2bkSS8NclVm5VXPYz0VglrMEMnmJnK4uKi3jsQvBEkHMaFZEpSJsLr00EcdyU0Ss');
 
-
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.SERVER_PORT || 3001;
 const app = express();
 const server = new ApolloServer({
   typeDefs,
@@ -17,7 +18,7 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-// app.use(cors()); // For Stripe
+app.use(cors()); // For Stripe
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -37,25 +38,25 @@ app.get('/', (req, res) => {
 //   const items = req.body.items;
 //   let lineItems = [];
 //   items.forEach((item) => { // converts items to Stripe friendly format
-//       lineItems.push(
-//           {
-//               price: item.id,
-//               quantity: item.quantity
-//           }
-//       )
+//     lineItems.push(
+//       {
+//         price: item.id,
+//         quantity: item.quantity
+//       }
+//     )
 //   });
 
 // creates session with items that Stripe can now read
-// const session = await stripe.checkout.sessions.create({
-//   line_items: lineItems,
-//   mode: 'payment',
-//   success_url: 'http://localhost:3000/success', // these addresses will need to change
-//   cancel_url: 'http://localhost:3000/success'
-// });
+//   const session = await stripe.checkout.sessions.create({
+//     line_items: lineItems,
+//     mode: 'payment',
+//     success_url: 'http://localhost:3000/success', // these addresses will need to change
+//     cancel_url: 'http://localhost:3000/ca'
+//   });
 
-// res.send(JSON.stringify({ // sends Stripe info back to front end
-//   url: session.url
-// }));
+//   res.send(JSON.stringify({ // sends Stripe info back to front end
+//     url: session.url
+//   }));
 // });
 
 // Create a new instance of an Apollo server with the GraphQL schema

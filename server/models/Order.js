@@ -3,27 +3,39 @@ const { Schema } = mongoose
 const dateFormat = require('../utils/dateFormat');
 
 const orderSchema = new Schema({
-    orderedAt: {
-        type: Date,
-        default: Date.now,
-        get: (timestamp) => dateFormat(timestamp)
+    // orderId: {
+    //     type: Schema.Types.UUID,
+    //     required: true,
+    //     unique: true
+    // },
+    userId: {
+        type: Schema.Types.ObjectID,
+        ref: 'user',
+        required: true
     },
     total: {
         type: Number,
         required: true
     },
-    user: {
-        type: Schema.Types.ObjectID,
-        ref: 'user'
+    transId: {
+        type: String,
+        required: true
+    },
+    orderedAt: {
+        type: Date,
+        default: Date.now,
+        get: (timestamp) => dateFormat(timestamp)
     },
     products: [{
-        type: Schema.Types.ObjectID,
-        ref: 'product'
-    }],
-    transId: {
-        type: Number,
-        required: true
-    }
+        productId: {
+            type: Schema.Types.ObjectID,
+            ref: 'product',
+            required: true
+        },
+        quantity: {
+            type: Number
+        }
+    }]
 })
 
 const Order = mongoose.model('Order', orderSchema)

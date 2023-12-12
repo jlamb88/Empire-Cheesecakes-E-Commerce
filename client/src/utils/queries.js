@@ -15,11 +15,12 @@ query products {
         rating
         dateAdded
       }
+      image
     }
   }`
 
 export const ONE_PRODUCT = gql`
-uery oneProduct($id: ID!) {
+query oneProduct($id: ID!) {
     product(_id: $id) {
       _id
       name
@@ -56,4 +57,16 @@ query oneUser($id: ID!) {
       }
     }
   }`
+
+export const CART = gql`
+query oneCart($userId: ID!) {
+  cart(userId: $userId) {
+    userId
+    items {
+      productId
+      quantity
+    }
+  }
+}`
+
 

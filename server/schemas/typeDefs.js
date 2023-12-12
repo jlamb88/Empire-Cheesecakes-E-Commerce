@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
 type User {
-    _id: ID
+    _id: ID!
     firstName: String
     lastName: String
     streetAddress: String
@@ -37,15 +37,16 @@ type Product {
     quantity: Int
     allergens: [String]
     comments: [Comment]
+    image: String
 }
 
 type Order {
-    _id: ID
-    total: Int
-    user: User
+    _id: ID!
+    userID: ID!
     products: [Product]
+    total: Int
+    transId: String
     orderedAt: String
-    transId: Int
 }
 
 type Comment {
@@ -56,25 +57,24 @@ type Comment {
 }
 
 type Cart {
-    id: String!
+    userId: ID!
+    items: [CartItem]
+}
+
+type CartItem {
+    productId: ID!
     quantity: Int
 }
 
 type Auth {
     token: ID!
-    user: User
+   user: User
 }
 
 type Checkout {
-    transId: ID
-}
-
-input userPayment {
-    _id: ID
-    cardType: cardTypeEnum!
-    cardNumber: Float!
-    expiration: String!
-    default: Boolean
+    userId: ID!
+    transId: String
+    url: String
 }
 
 type Query {
@@ -82,11 +82,11 @@ type Query {
     users: [User]
     products: [Product]
     product(_id: ID!): Product
-    userOrders(userId: ID!): Order
+    userOrders(userID: ID!): Order
     order(_id: ID!):Order
     orders: [Order]
     cart(userId: ID!): Cart
-    checkout(products: [ID]!): Checkout
+    carts: [Cart]
 }
 
 type Mutation {
@@ -104,9 +104,9 @@ type Mutation {
         ): Auth
     addOrder(
         userId: ID, 
-        products: [ID]!, 
+        orderItems: [orderItems], 
         total:Int, 
-        transId: Int): Order
+        transId: String): Order
     updateUser(
         firstName: String
         lastName: String
@@ -119,33 +119,53 @@ type Mutation {
         password: String!
         ):User
     addPayment(
-        content: userPayment
+        userId:ID!,
+        userPayment: paymentInput
     ):User
     updatePayment(
-        _id:ID!, content: userPayment
+        userId:ID!, userPayment: paymentInput
     ):User
     deletePayment(_id:ID!, payId:ID!):User
     addComment(
-        _id:ID!
-        name: String!
-        text: String!
-        rating: Int
+        name: String!,
+        text: String!,
+        rating: Int,
         ):Product
     addCart(
-        id: ID!
-        quantity: Int
+        userId: ID!,
+        cartContents: [cartInput]!
     ):Cart
     updateCartItems(
-        userID: ID!
-        productID: ID!
-        quantity: Int
-    ):Cart  
+        userId: ID!, cartContents: cartInput
+    ):Cart 
     deleteCartItem(
-        userID: ID!
-        productID: ID!
+        userId: ID!, cartContents: cartInput
     ):Cart
+    deleteCart(
+        userId: ID!
+    ):Cart
+    checkoutSession(userId: ID!): Checkout
+    }
 
-}`
+    input paymentInput {
+        cardType: cardTypeEnum!
+        cardNumber: Float!
+        expiration: String!
+        default: Boolean
+    }
+    
+    input cartInput {
+        productId: ID!
+        name: String
+        description: String
+        price: Int
+        quantity: Int!
+    }
+
+    input orderItems {
+        productId: ID!
+    }
+    `
 
 
 module.exports = typeDefs

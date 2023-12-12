@@ -1,99 +1,83 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import LoginForm from '../components/LoginForm';
-import UserPage from './UserPage'
-import Header from '../components/Header'
-import NavComponent from '../components/Navbar/Navbar';
-import { Row, Col } from 'react-bootstrap'
+import NaviBar from '../components/Navbar';
+import Header from '../components/Header';
+import { UserPage } from './';
+import { Row, Col, Button } from 'react-bootstrap';
+import { useAuth } from '../components/AuthContext';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
 
-const adminUser = { email: "admin@admin.com", password: "admin" }
+const adminUser = { email: 'admin@admin.com', password: 'admin' };
 
-const Login = ({ loggedIn, setLoggedIn }) => {
-    const [user, setUser] = useState({ name: "", email: "" });
-    const [error, setError] = useState("");
-    const Login = details => {
-        console.log(details)
 
-        if (details.email == adminUser.email && details.password == adminUser.password) {
-            console.log("logged In!")
-            setUser({
-                name: details.name,
-                email: details.email
-            })
-            return (
-                <div>
-                    <div>
-                        <Row>
-                            <Col className='col-6'>
-                                <Header />
-                            </Col>
-                            <Col className='col-6'>
-                                <NavComponent />
-                            </Col>
-                        </Row>
-                    </div>
-                    {(user.email != "") ? (
-                        <UserPage />
-                    ) : (
-                        <div>
-                            <div>
-                                <Row>
-                                    <Col className='col-6'>
-                                        <Header />
-                                    </Col>
-                                    <Col className='col-6'>
-                                        <NavComponent />
-                                    </Col>
-                                </Row>
-                            </div>
-                            <LoginForm Login={Login} error={error} />
-                        </div>
-                    )}
-                </div>
-            )
-        } else {
-            console.log('Information Does not match')
-            setError("Information does not match")
+const LoginUser = () => {
+    const [loginUserMutation] = useMutation(LOGIN_USER)
+    const { userInfo, setUserInfo, loggedIn, setLoggedIn } = useAuth()
+
+    const login = async (details) => {
+        try {
+            const { data } = await loginUserMutation({
+                variables: {
+                    email: details.email,
+                    password: details.password,
+                },
+            });
+
+            if (details.email === adminUser.email && details.password === adminUser.password) {
+                console.log('Admin logged in!');
+                setLoggedIn(true)
+                setUserInfo({
+                    userId: 'admin',
+                    token: 'adminToken'
+                });
+            } else {
+                console.log('User logged in!');
+                setLoggedIn(true)
+                setUserInfo({
+                    userId: data.login.user._id,
+                    token: data.login.token,
+                    firstName: data.login.user.firstName,
+                    lastName: data.login.user.lastName
+                })
+            }
+
+        } catch (error) {
+            console.error('Login error:', error);
         }
-    }
-    const Logout = () => {
-        setUser({ email: "" })
-    }
+    };
+
+    const logout = () => {
+        setLoggedIn(false)
+        setUserInfo({ userId: null, token: null });
+    };
 
     return (
         <div>
-            <div>
-                <Row>
-                    <Col className='col-6'>
-                        <Header />
-                    </Col>
-                    <Col className='col-6'>
-                        <NavComponent />
-                    </Col>
-                </Row>
-            </div>
-            {(user.email != "") ? (
+            <Row>
+                <Col>
+                    <Header />
+                </Col>
+                <Col>
+                    <NaviBar />
+                </Col>
+            </Row>
+
+            {loggedIn ? (
                 <div className="welcome">
-                    <h2>Welcome, <span>{user.email}!</span></h2>
-                    <button onClick={Logout} >Logout</button>
+                    <h2>
+                        Welcome, <span>{userInfo.firstName}!</span>
+                    </h2>
+                    <Button className='formButton' variant="secondary" type="submit" onClick={logout}>Logout</Button>
+                    {/* <UserPage /> */}
                 </div>
             ) : (
                 <div>
-                    <div>
-                        <Row>
-                            <Col className='col-6'>
-                                <Header />
-                            </Col>
-                            <Col className='col-6'>
-                                <NavComponent />
-                            </Col>
-                        </Row>
-                    </div>
-                    <LoginForm Login={Login} error={error} />
+                    <LoginForm login={login} />
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-
-export default Login;
+export default LoginUser;

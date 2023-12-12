@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-function signUpForm({ SignUp, error }) {
+function SignupForm({ SignUp, error }) {
     const [details, setDetails] = useState({ email: '', password: '' })
     const submitHandler = (e) => {
         e.preventDefault();
@@ -15,11 +15,11 @@ function signUpForm({ SignUp, error }) {
             <Form onSubmit={submitHandler}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={e => setDetails({ ...details, email: e.target.value })} value={details.email}/>
+                    <Form.Control type="email" placeholder="Enter email" onChange={e => setDetails({ ...details, email: e.target.value })} value={details.email} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password}/>
+                    <Form.Control type="password" placeholder="Password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} />
                 </Form.Group>
                 <Button className='formButton' variant="secondary" type="submit">
                     Submit
@@ -29,4 +29,4 @@ function signUpForm({ SignUp, error }) {
     );
 }
 
-export default signUpForm;
+export default SignupForm;

@@ -1,17 +1,20 @@
 const db = require('../config/connection');
-const { User, Product } = require('../models');
+const { User, Product, Cart } = require('../models');
 const seeds = require('./seedsjson');
 
 db.once('open', async () => {
   try {
-    await User.deleteMany({});
+    // await User.deleteMany({});
 
-    await User.create(seeds.seedUser());
+    // await User.create(seeds.seedUser());
 
-    await Product.deleteMany({})
+    // await Product.deleteMany({})
 
-    await Product.create(seeds.seedProduct())
+    // await Product.create(seeds.seedProduct())
 
+    await Cart.deleteMany({})
+
+    await Cart.create(seeds.seedCart())
 
   }
 

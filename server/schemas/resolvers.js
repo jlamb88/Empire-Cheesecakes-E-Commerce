@@ -1,8 +1,8 @@
-const { User, Product, Order, Cart } = require('../models/')
+const { User, Product, Order, Cart, Comment } = require('../models/')
 const { signToken } = require('../utils/auth')
 const { AuthenticationError } = require('apollo-server-express')
 // Stripe Secret Key
-const stripe = require('stripe')('sk_test_51M9WEeA0zgGYE8hKfLzdebUdsNrrjNE3SI2bkSS8NclVm5VXPYz0VglrMEMnmJnK4uKi3jsQvBEkHMaFZEpSJsLr00EcdyU0Ss');
+const stripe = require('stripe')('sk_test_51O7ixRFTNX2FVBkU9KhZetT4SHj2fqcsAlZfDIvHH49zIU20QrpIFXomJZyoUj7VWnTVvQygjJXJSXa7cNVu7kfp00zICDvxLY');
 
 const resolvers = {
     Query: {
@@ -21,46 +21,16 @@ const resolvers = {
         order: async (parent, orderId) => {
             return await Order.findOne({ _id: orderId })
         },
-        cart: async (parent, userId) => {
-            return await Cart.findOne({ user: { _id: userId } })
+        cart: async (parent, { userId }) => {
+            return await Cart.findOne({ userId: userId })
         },
-        checkout: async (parent, args, context) => {
-            const url = new URL(context.headers.referer).origin;
-            const order = new Order({ products: args.products });
-            const line_items = [];
+        carts: async () => {
+            return await Cart.find({})
 
-            const { products } = await order.populate('products');
-
-            for (let i = 0; i < products.length; i++) {
-                const product = await stripe.products.create({
-                    name: products[i].name,
-                    description: products[i].description
-                });
-
-                const price = await stripe.prices.create({
-                    product: product._id,
-                    unit_amount: products[i].price * 100,
-                    currency: 'usd',
-                });
-
-                line_items.push({
-                    price: price.id,
-                    quantity: 1
-                });
-            }
-
-            // stripe checkout
-            const session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                line_items,
-                mode: 'payment',
-                success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${url}/`
-            });
-
-            return { transId: session.id };
         }
+
     },
+
     Mutation: {
         addUser: async (parent, { firstName, lastName, streetAddress, city, state, zipcode, phone, email, password }) => {
             const user = await User.create({ firstName, lastName, streetAddress, city, state, zipcode, phone, email, password })
@@ -83,10 +53,11 @@ const resolvers = {
 
             const token = signToken(user)
 
-            return { token, user }
+            return { user, token }
         },
-        addOrder: async (parent, { userId, products, total, transId }, context) => {
-            return await Order.create({ userId, products, total, transId })
+
+        addOrder: async (parent, { userId, orderItems, total, transId }) => {
+            return await Order.create({ userId, products: orderItems, total, transId })
         },
         updateUser: async (parent, { userId, firstName, lastName, streetAddress, city, state, zipcode, phone, email, password }) => {
             return await User.findOneAndUpdate(
@@ -119,21 +90,20 @@ const resolvers = {
             return await Product.findOneAndUpdate(
                 { _id: productId },
                 { $addToSet: { comment: { name, text, rating }, }, },
-
                 { new: true }
             )
         },
-        addCart: async (parent, { userId, product, quantity }) => {
+        addCart: async (parent, { userId, cartContents }) => {
+
             return await Cart.create(
-                { userId, product, quantity }
-            ) 
-            // throw new AuthenticationError('Cart error');
+                { userId, items: cartContents }
+            )
+
         },
         updateCartItems: async (parent, { userId, productId, quantity }) => {
             return await Cart.findOneAndUpdate(
-                { userId: user._id },
-                { productId: product._id },
-                { quantity },
+                { userId: userId },
+                { $addToSet: { contents: { productId: productId, quantity: quantity } } },
                 { new: true }
             )
         },
@@ -141,10 +111,60 @@ const resolvers = {
             return await Cart.findOneAndDelete(
                 { userId: user._id } || { productId: product._id }
             )
-        }
+        },
+        deleteCart: async (parent, { userId }) => {
+            return await Cart.deleteOne({ userId: userId })
+        },
+        checkoutSession: async (parent, { userId }, context) => {
+            // console.log("context:", context.headers)
+            // console.log("referer:", context.headers.referer)
+            // const url = new URL(context.headers.referer).origin
+            ;
+            const url = 'http://localhost:4000'
+            // const url = window.location.href
 
+            //PROMISE CODE
+            try {
+                const cart = await Cart.findOne({ userId: userId });
+                const cartItems = cart.items;
+
+                const line_items = await Promise.all(cartItems.map(async (item) => {
+                    const productInfo = await Product.findOne({ _id: item.productId });
+
+                    return {
+                        quantity: item.quantity,
+                        price_data: {
+                            currency: 'usd',
+                            unit_amount: productInfo.price * 100,
+                            product_data: {
+                                product: productInfo.productId,
+                                name: productInfo.name,
+                                description: productInfo.description || undefined,
+                            }
+                        }
+                    };
+                }));
+
+                // stripe checkout
+                const session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    line_items,
+                    mode: 'payment',
+                    success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+                    cancel_url: `${url}/cart?cancelled=true`
+                });
+
+                // Return the necessary fields
+                return { userId: userId, transId: session.id, url: session.url };
+            } catch (error) {
+                // Handle errors
+                console.error(error);
+                throw new Error("Failed to create checkout session");
+            }
+        }
     }
 }
+
 
 
 module.exports = resolvers

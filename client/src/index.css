@@ -25,12 +25,12 @@ code {
   content: "";
   background-image: url(../public/background.jpg);
   background-size: cover;
-  position: absolute;
+  position: fixed;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 h1,
@@ -144,8 +144,11 @@ input#formBasicPassword {
 #logobox {
   position: relative;
   top: 160px;
-  background-color: lightgray;
+  left: 200px;
+  height: 200px;
+
+  background-color: rgba(211, 211, 211, 0.908);
   background-blend-mode: lighten;
-  opacity: 0.8;
+  opacity: 0.2;
   padding: 2em;
 }
