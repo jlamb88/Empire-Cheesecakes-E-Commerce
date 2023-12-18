@@ -15,7 +15,7 @@ const About = () => {
 				<Col>
 					<Header />
 				</Col>
-				<Col>
+				<Col className='mt-3 justify-content-right'>
 					<NaviBar />
 				</Col>
 			</Row>

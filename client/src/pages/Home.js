@@ -1,13 +1,8 @@
 //DEPENDENCIES
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Button } from 'react-bootstrap'
 import NaviBar from '../components/Navbar';
-
-
-//GRAPHQL
-// import { useQuery } from '@apollo/client';
-// import { QUERY_MATCHUPS } from '../utils/queries';
 
 const Home = () => {
 	return (
@@ -18,19 +13,25 @@ const Home = () => {
 				</Col>
 			</Row>
 
-			<section id="hero">
-				<div id='splashtext'>
-					<h1>Shop Our Products</h1>
-					<h3>Handmade baked goods delivered</h3>
-					<button variant='outline-dark'><Link to="/store">Enter Store</Link></button>
-				</div>
-				<div id='logobox'>
-					<img
-						src="/ECNFM.png"
-						alt="Empire Cheesecake Logo" />
-				</div>
-			</section>
+			<Row>
+				<Col className='col-4 justify-contents-top align-contents-center'>
+					<div id='splashtext'>
+						<h1>Shop Our Products</h1>
+						<h3>Handmade baked goods delivered</h3>
+						<Button className='formButton' variant="secondary" type="submit" as={NavLink} to="/store">Enter Store</Button>
+					</div>
+				</Col>
+				<Col className='col-8'>
+					<section id="hero">
+						<img
+							id="heroimage"
+							src="/ECNFM.png"
+							alt="Empire Cheesecake Logo" />
+					</section>
+				</Col>
+			</Row>
 		</div>
+
 	);
 };
 

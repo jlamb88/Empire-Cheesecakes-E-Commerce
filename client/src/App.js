@@ -23,7 +23,6 @@ import './index.css';
 // import Cancel from './pages/Cancel';
 import CartProvider from './components/CartContext';
 import AuthProvider from './components/AuthContext'
-import NaviBar from './components/Navbar';
 
 const httpLink = createHttpLink({
   uri: '/graphql',

@@ -27,7 +27,7 @@ function Store() {
                 <Col className='col-6'>
                     <Header />
                 </Col>
-                <Col>
+                <Col className='mt-3 justify-content-right'>
                     <NaviBar />
                 </Col>
             </Row>

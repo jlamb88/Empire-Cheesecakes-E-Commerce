@@ -1,4 +1,4 @@
-import Button from 'react-bootstrap/Button';
+import { Button, Row, Col } from 'react-bootstrap';
 import { CartContext } from './CartContext';
 import React, { useContext } from 'react';
 // import { getProductData } from '../productStore';
@@ -11,14 +11,19 @@ function CartProduct(props) {
     const price = props.price
     const name = props.name
     // const productData = getProductData(id);
-    console.log(props)
-    console.log("cartProduct id:", id)
+
 
     return (
 
         <div class="mb-3">
-            <h4>{name}</h4>
-            <p>Qty: {quantity}</p>
+            <Row><h4>{name}</h4></Row>
+            <Row>
+                <Col>Qty: {quantity}</Col>
+                <Col sm='6'>
+                    <Button variant='secondary' sm='6' onClick={() => cart.addOneCart(id)} className='mx-2'>+</Button>
+                    <Button variant='secondary' sm='6' onClick={() => cart.removeOne(id)} className='mx-2'>-</Button>
+                </Col>
+            </Row>
             <h4>${(quantity * price).toFixed(2)}</h4>
             <Button variant='danger' size='sm' onClick={() => cart.deleteFromCart(id)}>Remove</Button>
         </div>

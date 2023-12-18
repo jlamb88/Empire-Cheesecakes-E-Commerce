@@ -20,7 +20,7 @@ function NaviBar() {
 
     // checkout function for checkout button w/ POST route.
     const checkout = async () => {
-
+        console.log("checkout cart:", userInfo.userId, cart.items)
         await runAddCart({
             variables: {
                 userId: userInfo.userId,

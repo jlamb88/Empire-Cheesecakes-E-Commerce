@@ -14,7 +14,7 @@ db.once('open', async () => {
 
     await Cart.deleteMany({})
 
-    await Cart.create(seeds.seedCart())
+    // await Cart.create(seeds.seedCart())
 
   }
 

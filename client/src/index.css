@@ -30,7 +30,8 @@ code {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  opacity: 1;
+  opacity: 0.9
+  ;
 }
 
 h1,
@@ -151,4 +152,10 @@ input#formBasicPassword {
   background-blend-mode: lighten;
   opacity: 0.2;
   padding: 2em;
+}
+
+#heroimage {
+  position: absolute;
+  top: 300px;
+  left:525px;
 }

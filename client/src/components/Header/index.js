@@ -6,7 +6,7 @@ const Header = () => {
     return (
         <section id="header">
 
-            <div className="mt-2 d-flex col-6 justify-content-left">
+            <div className="mt-3 d-flex col-6 justify-content-left">
 
                 <img
                     src="/ECNFM.png"
