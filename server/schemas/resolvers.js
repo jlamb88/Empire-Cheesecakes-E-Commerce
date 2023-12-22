@@ -113,14 +113,15 @@ const resolvers = {
             )
         },
         deleteCart: async (parent, { userId }) => {
-            return await Cart.deleteOne({ userId: userId })
+            await Cart.deleteOne({ userId: userId })
+            return "Cart deleted"
         },
         checkoutSession: async (parent, { userId }, context) => {
             // console.log("context:", context.headers)
             // console.log("referer:", context.headers.referer)
             // const url = new URL(context.headers.referer).origin
             ;
-            const url = 'http://localhost:4000'
+            const url = 'http://localhost:3000'
             // const url = window.location.href
 
             //PROMISE CODE
@@ -151,7 +152,7 @@ const resolvers = {
                     line_items,
                     mode: 'payment',
                     success_url: `${url}/success`,
-                    cancel_url: `${url}/cart?cancelled=true`
+                    cancel_url: `${url}/store?cancelled=true`
                 });
 
                 // Return the necessary fields

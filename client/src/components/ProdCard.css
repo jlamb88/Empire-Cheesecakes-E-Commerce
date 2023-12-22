@@ -9,5 +9,9 @@ min-height: 3em;
 }
 
 .card {
-min-height: 42em;
+min-height: 41.5em;
+}
+
+#price {
+    font-size: 20px;
 }

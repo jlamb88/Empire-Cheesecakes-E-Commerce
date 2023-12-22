@@ -20,15 +20,15 @@ function ProductCard(props) {
                 {/* checks product quantity to determine which buttons to show */}
                 {productQuantity > 0 ?
                     <div>
-                        <Button variant='dark' onClick={() => cart.deleteFromCart(product._id)} className='my-2'>Remove All</Button>
+                        <Button variant='dark' onClick={() => cart.deleteFromCart(product._id)} className='mb-2'>Remove All</Button>
                         <div>
-                            <Form as={Row}>
-                                <Col className="Col-5">
-                                    <Form.Label column='true' sm='6'> Cart Qty: {productQuantity} </Form.Label>
+                            <Form as={Row} className="align-items-center">
+                                <Col className="Col-6 align-items-center">
+                                    <Form.Label sm='6' > Cart Qty: {productQuantity} </Form.Label>
                                 </Col>
-                                <Col className="Col-5" sm='6'>
-                                    <Button variant='secondary' sm='6' onClick={() => cart.addOne({ id: product._id })} className='mx-2'>+</Button>
-                                    <Button variant='secondary' sm='6' onClick={() => cart.removeOne(product._id)} className='mx-2'>-</Button>
+                                <Col className="Col-6" sm='6'>
+                                    <Button variant='secondary' sm='6' onClick={() => cart.addOne({ id: product._id })} className='mx-1'>+</Button>
+                                    <Button variant='secondary' sm='6' onClick={() => cart.removeOne(product._id)} className='mx-1'>-</Button>
                                 </Col>
                             </Form>
                         </div>
@@ -36,17 +36,6 @@ function ProductCard(props) {
                     :
                     <div>
                         <Button variant='dark' onClick={() => cart.addOne({ id: product._id, name: product.name, price: product.price })}> Add To Cart </Button>
-                        <div style={{ visibility: "hidden" }}>
-                            <Form as={Row}>
-                                <Col>
-                                    <Form.Label column='true' sm='6'> Cart Qty: {productQuantity} </Form.Label>
-                                </Col>
-                                <Col sm='6'>
-                                    <Button variant='secondary' sm='6' onClick={() => cart.addOne({ id: product._id })} className='mx-2'>+</Button>
-                                    <Button variant='secondary' sm='6' onClick={() => cart.removeOne(product._id)} className='mx-2'>-</Button>
-                                </Col>
-                            </Form>
-                        </div>
                     </div>
                 }
             </Card.Body>

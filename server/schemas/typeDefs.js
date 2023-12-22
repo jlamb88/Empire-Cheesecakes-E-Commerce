@@ -143,7 +143,7 @@ type Mutation {
     ):Cart
     deleteCart(
         userId: ID!
-    ):User
+):String
     checkoutSession(userId: ID!): Checkout
     }
 

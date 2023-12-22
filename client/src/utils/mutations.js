@@ -35,6 +35,11 @@ mutation addCart($userId: ID!, $cartContents: [cartInput]!) {
   }
 }
 `
+export const DELETE_CART = gql`
+mutation deleteCart($userId: ID!) {
+  deleteCart(userId: $userId)
+}
+`
 export const CHECKOUT = gql`
 mutation checkoutSession($userId: ID!) {
   checkoutSession(userId: $userId) {

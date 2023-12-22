@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { UserPage } from './';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useAuth } from '../components/AuthContext';
+import { CartContext } from '../components/CartContext'
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
@@ -14,6 +15,8 @@ const adminUser = { email: 'admin@admin.com', password: 'admin' };
 const LoginUser = () => {
     const [loginUserMutation] = useMutation(LOGIN_USER)
     const { userInfo, setUserInfo, loggedIn, setLoggedIn } = useAuth()
+    const cart = useContext(CartContext)
+
 
     const login = async (details) => {
         try {
@@ -47,10 +50,11 @@ const LoginUser = () => {
         }
     };
 
-    const logout = () => {
+    const logout = async () => {
+        cart.deleteCart()
         setLoggedIn(false)
         setUserInfo({ userId: null, token: null });
-    };
+    }
 
     return (
         <div>
